@@ -1,5 +1,5 @@
 import apiClient from './api';
-import { ApiResponse, DashboardData, ChartData, PaginationParams } from '../types';
+import type { ApiResponse, DashboardData, ChartData, PaginationParams } from '../types';
 
 // Service cho Dashboard Analytics
 export const dashboardService = {
@@ -13,14 +13,6 @@ export const dashboardService = {
   getChartData: async (type: string, period: string): Promise<ApiResponse<ChartData[]>> => {
     const response = await apiClient.get(`/dashboard/charts/${type}`, {
       params: { period }
-    });
-    return response.data;
-  },
-
-  // Lấy dữ liệu theo thời gian
-  getAnalyticsByPeriod: async (startDate: string, endDate: string): Promise<ApiResponse<any>> => {
-    const response = await apiClient.get('/dashboard/analytics', {
-      params: { startDate, endDate }
     });
     return response.data;
   },
@@ -67,11 +59,5 @@ export const authService = {
   logout: async (): Promise<void> => {
     await apiClient.post('/auth/logout');
     localStorage.removeItem('authToken');
-  },
-
-  // Làm mới token
-  refreshToken: async (): Promise<ApiResponse<any>> => {
-    const response = await apiClient.post('/auth/refresh');
-    return response.data;
   }
 };

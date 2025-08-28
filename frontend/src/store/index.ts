@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { User, DashboardData, ChartData } from '../types';
+import type { User, DashboardData, ChartData } from '../types';
 
 // Store cho quản lý authentication
 interface AuthState {

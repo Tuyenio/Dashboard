@@ -1,5 +1,6 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { ApiResponse, ApiError } from '../types';
+import axios from 'axios';
+import type { AxiosInstance, AxiosResponse } from 'axios';
+import type { ApiError } from '../types';
 
 // Tạo axios instance với cấu hình cơ bản
 const apiClient: AxiosInstance = axios.create({

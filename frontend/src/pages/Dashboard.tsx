@@ -138,7 +138,7 @@ const Dashboard: React.FC = () => {
       {/* Summary Cards */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {sampleSummaryData.map((item) => (
-          <Grid key={item.id} xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={3} key={item.id}>
             <StatCard
               title={item.title}
               value={item.value}
@@ -154,7 +154,7 @@ const Dashboard: React.FC = () => {
 
       {/* Charts */}
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid item xs={12} md={8}>
           <LineChartCard
             title="Doanh thu theo thời gian"
             data={sampleChartData}
@@ -162,7 +162,7 @@ const Dashboard: React.FC = () => {
             xAxisKey="date"
           />
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid item xs={12} md={4}>
           <BarChartCard
             title="Đơn hàng theo ngày"
             data={sampleChartData}
