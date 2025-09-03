@@ -24,7 +24,12 @@ export const useAuthStore = create<AuthState>()(
         isLoading: false,
         setUser: (user) => set({ user, isAuthenticated: true }),
         setToken: (token) => set({ token }),
-        logout: () => set({ user: null, token: null, isAuthenticated: false }),
+        logout: () => {
+          // Xóa hoàn toàn tất cả dữ liệu auth
+          set({ user: null, token: null, isAuthenticated: false });
+          // Xóa persist storage
+          localStorage.removeItem('auth-storage');
+        },
         setLoading: (isLoading) => set({ isLoading }),
       }),
       {

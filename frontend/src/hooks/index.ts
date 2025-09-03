@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { dashboardService, userService, authService } from '../services';
 import { useAuthStore, useDashboardStore } from '../store';
 import type { PaginationParams } from '../types';
 
 // Hook cho xác thực
 export const useAuth = () => {
-  const { setUser, setToken, logout } = useAuthStore();
+  const { setUser, setToken, logout: storeLogout } = useAuthStore();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const loginMutation = useMutation({
     mutationFn: authService.login,
@@ -21,18 +23,32 @@ export const useAuth = () => {
     },
   });
 
-  const logoutMutation = useMutation({
-    mutationFn: authService.logout,
-    onSuccess: () => {
-      logout();
+  // Hàm đăng xuất đơn giản và hiệu quả
+  const logout = () => {
+    try {
+      // Xóa dữ liệu từ store
+      storeLogout();
+
+      // Xóa token từ localStorage
+      localStorage.removeItem('authToken');
+
+      // Xóa tất cả cache
       queryClient.clear();
-    },
-  });
+
+      // Điều hướng về trang login
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Lỗi khi đăng xuất:', error);
+      // Vẫn thực hiện đăng xuất ngay cả khi có lỗi
+      localStorage.removeItem('authToken');
+      navigate('/login', { replace: true });
+    }
+  };
 
   return {
     login: loginMutation.mutate,
-    logout: logoutMutation.mutate,
-    isLoading: loginMutation.isPending || logoutMutation.isPending,
+    logout,
+    isLoading: loginMutation.isPending,
   };
 };
 
