@@ -45,11 +45,10 @@ import { useNavigate } from 'react-router-dom';
 // Container chính với hiệu ứng cao cấp
 const LoginContainer = styled(Box)`
   min-height: 100vh;
-  max-height: 100vh;
   width: 100vw;
   position: relative;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   background: linear-gradient(135deg, 
     #0f172a 0%, 
     #1e293b 15%, 
@@ -115,9 +114,19 @@ const LoginContainer = styled(Box)`
     opacity: 0.4;
   }
 
-  @media (max-width: 1024px) {
+  /* Tối ưu cho laptop */
+  @media (min-width: 1024px) {
+    height: 100vh;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 1023px) {
+    min-height: 100vh;
     overflow-y: auto;
-    max-height: none;
+    padding: 1rem 0;
   }
 `;
 
@@ -237,14 +246,21 @@ const MainContent = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   width: 100%;
   padding: 0 1.5rem;
   position: relative;
   z-index: 10;
   box-sizing: border-box;
 
-  @media (max-width: 1024px) {
+  /* Tối ưu cho laptop */
+  @media (min-width: 1024px) {
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Mobile */
+  @media (max-width: 1023px) {
     height: auto;
     min-height: 100vh;
     overflow-y: auto;
@@ -262,15 +278,23 @@ const ContentWrapper = styled(motion.div)`
   justify-content: center;
   width: 100%;
   max-width: 1200px;
-  height: 100%;
   gap: 2.5rem;
   
-  @media (max-width: 1200px) {
+  /* Desktop và laptop */
+  @media (min-width: 1024px) {
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @media (max-width: 1200px) and (min-width: 1024px) {
     gap: 2rem;
     max-width: 1000px;
   }
   
-  @media (max-width: 1024px) {
+  /* Mobile và tablet */
+  @media (max-width: 1023px) {
     flex-direction: column;
     gap: 1.5rem;
     align-items: center;
@@ -293,9 +317,8 @@ const LeftPanel = styled(Box)`
   padding: 1rem;
   color: white;
   max-width: 480px;
-  height: 100%;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     max-width: 100%;
     padding: 0.5rem;
     text-align: center;
@@ -311,10 +334,15 @@ const RightPanel = styled(Box)`
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  max-width: 400px;
-  height: 100%;
+  max-width: 420px;
 
-  @media (max-width: 1024px) {
+  /* Tối ưu cho laptop */
+  @media (min-width: 1024px) {
+    max-width: 420px;
+    min-width: 380px;
+  }
+
+  @media (max-width: 1023px) {
     max-width: 100%;
     width: 100%;
     order: 1;
@@ -338,31 +366,6 @@ const GlassCard = styled(Card)`
   position: relative;
   width: 100%;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Tối ưu chiều cao cho laptop - đăng ký */
-  @media (min-width: 1025px) {
-    max-height: 90vh;
-    overflow-y: auto;
-    
-    /* Custom scrollbar cho laptop */
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 3px;
-      
-      &:hover {
-        background: rgba(255, 255, 255, 0.5);
-      }
-    }
-  }
   
   &::before {
     content: '';
@@ -445,8 +448,8 @@ const StyledTextField = styled(TextField)`
     
     &:hover {
       background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-3px);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
       
       &::before {
         opacity: 1;
@@ -455,8 +458,8 @@ const StyledTextField = styled(TextField)`
     
     &.Mui-focused {
       background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 25px 55px rgba(0, 0, 0, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     }
     
     fieldset {
@@ -467,12 +470,12 @@ const StyledTextField = styled(TextField)`
     
     &:hover fieldset {
       border-color: rgba(255, 255, 255, 0.6);
-      border-width: 3px;
+      border-width: 2.5px;
     }
     
     &.Mui-focused fieldset {
       border-color: rgba(59, 130, 246, 0.8);
-      border-width: 3px;
+      border-width: 2.5px;
     }
   }
   
@@ -481,9 +484,11 @@ const StyledTextField = styled(TextField)`
     font-weight: 600;
     z-index: 2;
     position: relative;
+    transition: all 0.3s ease;
     
     &.Mui-focused {
       color: rgba(59, 130, 246, 1);
+      transform: scale(0.9);
     }
   }
   
@@ -492,6 +497,22 @@ const StyledTextField = styled(TextField)`
     font-weight: 500;
     z-index: 2;
     position: relative;
+  }
+
+  /* Animation cho input */
+  &.input-animate {
+    animation: inputFadeIn 0.6s ease-out;
+  }
+
+  @keyframes inputFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `;
 
@@ -796,85 +817,6 @@ const Login: React.FC = () => {
     { icon: Calculate, position: 'bottom-right' as const, delay: 0.9 },
   ];
 
-  // Component PasswordInput tối ưu để tránh lỗi icon trùng
-  const PasswordField = styled(StyledTextField)`
-    .MuiOutlinedInput-adornedEnd {
-      padding-right: 14px;
-    }
-    
-    .MuiInputAdornment-positionEnd {
-      margin-left: 8px;
-    }
-    
-    /* Đảm bảo icon mắt không bị trùng lặp */
-    .MuiInputAdornment-root:last-of-type {
-      position: relative;
-      z-index: 10;
-    }
-    
-    /* Tối ưu cho layout đăng ký */
-    .MuiOutlinedInput-root {
-      margin: 4px 0;
-      
-      @media (min-width: 1025px) {
-        margin: 6px 0;
-      }
-    }
-  `;
-
-  // Component PasswordInput để tránh trùng lặp code và icon
-  const PasswordInput = React.memo(({
-    label,
-    value,
-    onChange,
-    showPassword,
-    onToggleShow,
-    ...props
-  }: {
-    label: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    showPassword: boolean;
-    onToggleShow: () => void;
-    [key: string]: any;
-  }) => (
-    <PasswordField
-      margin="normal"
-      required
-      fullWidth
-      label={label}
-      type={showPassword ? 'text' : 'password'}
-      value={value}
-      onChange={onChange}
-      disabled={isLoading}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <LockOutlined sx={{ color: 'rgba(255, 255, 255, 0.7)', zIndex: 2, fontSize: 20 }} />
-          </InputAdornment>
-        ),
-        endAdornment: value && (
-          <InputAdornment position="end">
-            <IconButton
-              onClick={onToggleShow}
-              edge="end"
-              sx={{
-                color: 'rgba(255, 255, 255, 0.7)',
-                zIndex: 10,
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                }
-              }}
-            >
-              {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-      {...props}
-    />
-  ));
-
   return (
     <LoginContainer>
       {/* Hiệu ứng góc với biểu tượng giáo dục nghệ thuật */}
@@ -1020,44 +962,38 @@ const Login: React.FC = () => {
             <motion.div variants={itemVariants} style={{ width: '100%' }}>
               <GlassCard>
                 <CardContent sx={{
-                  p: { xs: 2.5, md: 3 },
+                  p: { xs: 3, md: 4 },
                   position: 'relative',
                   zIndex: 2,
-                  minHeight: {
-                    xs: 'auto',
-                    md: isForgotPassword ? '420px' : (!isLogin ? '520px' : '480px')
-                  },
-                  maxHeight: { xs: 'none', md: '90vh' },
-                  overflowY: { xs: 'visible', md: 'auto' },
+                  minHeight: { xs: 'auto', md: isForgotPassword ? '450px' : (!isLogin ? '650px' : '550px') },
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: !isLogin && !isMobile ? 'flex-start' : 'center',
-                  paddingTop: !isLogin && !isMobile ? 1.5 : 3
+                  justifyContent: 'center'
                 }}>
-                  {/* Header - Thu nhỏ cho đăng ký */}
+                  {/* Header */}
                   <motion.div variants={itemVariants}>
-                    <Box display="flex" flexDirection="column" alignItems="center" mb={!isLogin ? 1.2 : 2.5}>
+                    <Box display="flex" flexDirection="column" alignItems="center" mb={2.5}>
                       <motion.div
                         whileHover={{ scale: 1.08, rotate: 12 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                       >
                         <Avatar
                           sx={{
-                            m: 0.3,
+                            m: 0.5,
                             bgcolor: isForgotPassword ? 'rgba(168, 85, 247, 0.2)' :
                                      isLogin ? 'rgba(59, 130, 246, 0.2)' : 'rgba(34, 197, 94, 0.2)',
-                            width: { xs: 70, md: !isLogin ? 60 : 80 },
-                            height: { xs: 70, md: !isLogin ? 60 : 80 },
+                            width: { xs: 75, md: 80 },
+                            height: { xs: 75, md: 80 },
                             boxShadow: '0 15px 35px rgba(0, 0, 0, 0.25)',
                             border: '3px solid rgba(255, 255, 255, 0.3)'
                           }}
                         >
                           {isForgotPassword ? (
-                            <LockOutlined sx={{ fontSize: { xs: 32, md: !isLogin ? 28 : 40 }, color: 'white' }} />
+                            <LockOutlined sx={{ fontSize: { xs: 36, md: 40 }, color: 'white' }} />
                           ) : isLogin ? (
-                            <LockOutlined sx={{ fontSize: { xs: 32, md: !isLogin ? 28 : 40 }, color: 'white' }} />
+                            <LockOutlined sx={{ fontSize: { xs: 36, md: 40 }, color: 'white' }} />
                           ) : (
-                            <PersonAdd sx={{ fontSize: { xs: 32, md: !isLogin ? 28 : 40 }, color: 'white' }} />
+                            <PersonAdd sx={{ fontSize: { xs: 36, md: 40 }, color: 'white' }} />
                           )}
                         </Avatar>
                       </motion.div>
@@ -1072,8 +1008,8 @@ const Login: React.FC = () => {
                           backgroundClip: 'text',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
-                          mb: !isLogin ? 0.3 : 1,
-                          fontSize: { xs: '1.4rem', md: !isLogin ? '1.5rem' : '1.8rem' },
+                          mb: 1,
+                          fontSize: { xs: '1.6rem', md: '1.8rem' },
                           letterSpacing: '-0.02em'
                         }}
                       >
@@ -1087,10 +1023,10 @@ const Login: React.FC = () => {
                           sx={{
                             color: 'rgba(255, 255, 255, 0.7)',
                             textAlign: 'center',
-                            fontSize: '0.9rem',
-                            lineHeight: 1.5,
+                            fontSize: '1rem',
+                            lineHeight: 1.6,
                             mb: 1,
-                            maxWidth: '300px'
+                            maxWidth: '320px'
                           }}
                         >
                           Không thể truy cập tài khoản của bạn?
@@ -1101,42 +1037,42 @@ const Login: React.FC = () => {
                     </Box>
                   </motion.div>
 
-                  {/* Social Login - Thu nhỏ cho đăng ký */}
+                  {/* Social Login - Hide for forgot password */}
                   {!isForgotPassword && (
                     <motion.div variants={itemVariants}>
-                      <Box display="flex" justifyContent="center" gap={0.5} mb={!isLogin ? 1.2 : 2}>
+                      <Box display="flex" justifyContent="center" gap={1} mb={2}>
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                          <SocialButton sx={{ width: !isLogin ? 35 : 45, height: !isLogin ? 35 : 45 }}>
-                            <Google sx={{ fontSize: !isLogin ? 16 : 20 }} />
+                          <SocialButton>
+                            <Google sx={{ fontSize: 20 }} />
                           </SocialButton>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                          <SocialButton sx={{ width: !isLogin ? 35 : 45, height: !isLogin ? 35 : 45 }}>
-                            <Facebook sx={{ fontSize: !isLogin ? 16 : 20 }} />
+                          <SocialButton>
+                            <Facebook sx={{ fontSize: 20 }} />
                           </SocialButton>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                          <SocialButton sx={{ width: !isLogin ? 35 : 45, height: !isLogin ? 35 : 45 }}>
-                            <GitHub sx={{ fontSize: !isLogin ? 16 : 20 }} />
+                          <SocialButton>
+                            <GitHub sx={{ fontSize: 20 }} />
                           </SocialButton>
                         </motion.div>
                       </Box>
 
-                      <Box display="flex" alignItems="center" mb={!isLogin ? 1.5 : 2.5}>
+                      <Box display="flex" alignItems="center" mb={2.5}>
                         <Divider sx={{ flex: 1, bgcolor: 'rgba(255, 255, 255, 0.3)', height: '1px' }} />
                         <Chip
                           label={isLogin ? "HOẶC ĐĂNG NHẬP BẰNG EMAIL" : "HOẶC ĐĂNG KÝ BẰNG EMAIL"}
                           sx={{
-                            mx: 1.2,
+                            mx: 2,
                             bgcolor: 'rgba(255, 255, 255, 0.12)',
                             color: 'rgba(255, 255, 255, 0.9)',
                             border: '1px solid rgba(255, 255, 255, 0.25)',
                             fontWeight: 600,
                             backdropFilter: 'blur(15px)',
-                            fontSize: !isLogin ? '0.6rem' : '0.7rem',
-                            height: !isLogin ? '22px' : '28px',
+                            fontSize: '0.7rem',
+                            height: '28px',
                             '& .MuiChip-label': {
-                              padding: !isLogin ? '0 6px' : '0 10px'
+                              padding: '0 10px'
                             }
                           }}
                         />
@@ -1159,14 +1095,14 @@ const Login: React.FC = () => {
                             <Alert
                               severity="error"
                               sx={{
-                                mb: 1.2,
+                                mb: 2,
                                 bgcolor: 'rgba(239, 68, 68, 0.12)',
                                 color: 'white',
                                 border: '2px solid rgba(239, 68, 68, 0.3)',
                                 borderRadius: 3,
                                 backdropFilter: 'blur(15px)',
                                 fontWeight: 600,
-                                fontSize: '0.8rem',
+                                fontSize: '0.85rem',
                                 '& .MuiAlert-icon': { color: '#ef4444' }
                               }}
                             >
@@ -1188,14 +1124,14 @@ const Login: React.FC = () => {
                             <Alert
                               severity="success"
                               sx={{
-                                mb: 1.2,
+                                mb: 2,
                                 bgcolor: 'rgba(34, 197, 94, 0.12)',
                                 color: 'white',
                                 border: '2px solid rgba(34, 197, 94, 0.3)',
                                 borderRadius: 3,
                                 backdropFilter: 'blur(15px)',
                                 fontWeight: 600,
-                                fontSize: '0.8rem',
+                                fontSize: '0.85rem',
                                 '& .MuiAlert-icon': { color: '#22c55e' }
                               }}
                             >
@@ -1309,7 +1245,7 @@ const Login: React.FC = () => {
                                       </InputAdornment>
                                     ),
                                   }}
-                                  sx={{ mb: 0.8 }}
+                                  sx={{ mb: 1.5 }}
                                 />
                               </motion.div>
                             )}
@@ -1335,22 +1271,43 @@ const Login: React.FC = () => {
                                   </InputAdornment>
                                 ),
                               }}
-                              sx={{ mb: !isLogin ? 0.8 : 1.5 }}
+                              sx={{ mb: 1.5 }}
                             />
                           </motion.div>
 
-                          {/* Password Field - Sử dụng component mới để tránh lỗi icon trùng */}
+                          {/* Password Field */}
                           <motion.div variants={itemVariants}>
-                            <PasswordInput
-                              label="Mật khẩu"
-                              value={password}
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                              showPassword={showPassword}
-                              onToggleShow={() => setShowPassword(!showPassword)}
+                            <StyledTextField
+                              margin="normal"
+                              required
+                              fullWidth
                               name="password"
+                              label="Mật khẩu"
+                              type={showPassword ? 'text' : 'password'}
                               id="password"
                               autoComplete="current-password"
-                              sx={{ mb: !isLogin ? 0.8 : 1.8 }}
+                              value={password}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                              disabled={isLoading}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <LockOutlined sx={{ color: 'rgba(255, 255, 255, 0.7)', zIndex: 2, fontSize: 20 }} />
+                                  </InputAdornment>
+                                ),
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      onClick={() => setShowPassword(!showPassword)}
+                                      edge="end"
+                                      sx={{ color: 'rgba(255, 255, 255, 0.7)', zIndex: 2 }}
+                                    >
+                                      {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              sx={{ mb: !isLogin ? 1.5 : 2.5 }}
                             />
                           </motion.div>
 
@@ -1364,15 +1321,36 @@ const Login: React.FC = () => {
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.3 }}
                               >
-                                <PasswordInput
+                                <StyledTextField
+                                  margin="normal"
+                                  required
+                                  fullWidth
+                                  name="confirmPassword"
                                   label="Xác nhận mật khẩu"
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  id="confirmPassword"
                                   value={confirmPassword}
                                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
-                                  showPassword={showConfirmPassword}
-                                  onToggleShow={() => setShowConfirmPassword(!showConfirmPassword)}
-                                  name="confirmPassword"
-                                  id="confirmPassword"
-                                  sx={{ mb: 1.2 }}
+                                  disabled={isLoading}
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <LockOutlined sx={{ color: 'rgba(255, 255, 255, 0.7)', zIndex: 2, fontSize: 20 }} />
+                                      </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          edge="end"
+                                          sx={{ color: 'rgba(255, 255, 255, 0.7)', zIndex: 2 }}
+                                        >
+                                          {showConfirmPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{ mb: 2.5 }}
                                 />
                               </motion.div>
                             )}
@@ -1399,9 +1377,9 @@ const Login: React.FC = () => {
                                 )
                               }
                               sx={{
-                                mb: 1.2,
-                                padding: { xs: '12px 24px', md: !isLogin ? '12px 24px' : '16px 32px' },
-                                fontSize: { xs: '0.95rem', md: !isLogin ? '0.95rem' : '1.1rem' }
+                                mb: 2,
+                                padding: { xs: '14px 28px', md: '16px 32px' },
+                                fontSize: { xs: '1rem', md: '1.1rem' }
                               }}
                             >
                               {isLoading
@@ -1423,9 +1401,9 @@ const Login: React.FC = () => {
                                   textTransform: 'none',
                                   fontWeight: 600,
                                   borderRadius: 3,
-                                  px: 1.2,
-                                  py: 0.8,
-                                  fontSize: { xs: '0.75rem', md: !isLogin ? '0.8rem' : '0.95rem' },
+                                  px: 2,
+                                  py: 1.2,
+                                  fontSize: { xs: '0.85rem', md: '0.95rem' },
                                   '&:hover': {
                                     backgroundColor: 'rgba(255, 255, 255, 0.12)',
                                     color: 'white',
@@ -1433,7 +1411,7 @@ const Login: React.FC = () => {
                                   },
                                   transition: 'all 0.3s ease'
                                 }}
-                                startIcon={isLogin ? <PersonAdd sx={{ fontSize: 16 }} /> : <LoginOutlined sx={{ fontSize: 16 }} />}
+                                startIcon={isLogin ? <PersonAdd sx={{ fontSize: 20 }} /> : <LoginOutlined sx={{ fontSize: 20 }} />}
                               >
                                 {isLogin
                                   ? 'Chưa có tài khoản? Đăng ký ngay'
@@ -1446,14 +1424,14 @@ const Login: React.FC = () => {
                           {/* Forgot Password Link - Only show on login */}
                           {isLogin && (
                             <motion.div variants={itemVariants}>
-                              <Box display="flex" justifyContent="center" mt={0.5}>
+                              <Box display="flex" justifyContent="center" mt={1}>
                                 <Button
                                   onClick={handleForgotPassword}
                                   sx={{
                                     color: 'rgba(255, 255, 255, 0.7)',
                                     textTransform: 'none',
                                     fontWeight: 500,
-                                    fontSize: { xs: '0.75rem', md: '0.8rem' },
+                                    fontSize: { xs: '0.8rem', md: '0.85rem' },
                                     '&:hover': {
                                       color: 'rgba(59, 130, 246, 0.8)',
                                       backgroundColor: 'transparent'
@@ -1480,4 +1458,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
